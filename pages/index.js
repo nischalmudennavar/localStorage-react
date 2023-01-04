@@ -1,10 +1,28 @@
-import Head from 'next/head'
+import { useState, useEffect } from "react";
+import Head from "next/head";
 
-import styles from '../styles/Home.module.scss'
+import styles from "../styles/Home.module.scss";
 
-import posts from '../data/posts.json';
+import posts from "../data/posts.json";
 
 export default function Home() {
+  // nischal's code
+  const [showBanner, setShowBanner] = useState(true);
+
+  useEffect(() => {
+    const data = window.localStorage.getItem("banner");
+    setShowBanner(JSON.parse(data));
+    console.log(data);
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem("banner", JSON.stringify(showBanner));
+
+    console.log("showBanner: ", showBanner);
+  }, [showBanner]);
+
+  // persistent state in local storage
+
   return (
     <div className={styles.container}>
       <Head>
@@ -14,43 +32,60 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-
-        <div className={styles.signup}>
-          <div className={styles.signupBody}>
-            <h2>Welcome to Space Jelly!</h2>
-            <p>Sign up for my newsletter to get the latest tutorials straight to your inbox.</p>
+        {showBanner && (
+          <div className={styles.signup}>
+            <div className={styles.signupBody}>
+              <h2>Welcome to Space Jelly!</h2>
+              <p>
+                Sign up for my newsletter to get the latest tutorials straight
+                to your inbox.
+              </p>
+            </div>
+            <div className={styles.signupCta}>
+              <p>
+                <a href="https://colbyfayock.com/newsletter">
+                  Sign Up for Newsletter
+                </a>
+              </p>
+            </div>
+            {/*  nischal code  */}
+            <button
+              className={styles.signupHide}
+              onClick={() => setShowBanner(false)}
+            >
+              Hide
+            </button>
           </div>
-          <div className={styles.signupCta}>
-            <p>
-              <a href="https://colbyfayock.com/newsletter">Sign Up for Newsletter</a>
-            </p>
-          </div>
-          <button className={styles.signupHide}>Hide</button>
-        </div>
+        )}
 
-        <h1 className={styles.title}>
-          My Space Jelly Blog
-        </h1>
+        <h1 className={styles.title}>My Space Jelly Blog</h1>
 
         <ul className={styles.posts}>
-          {posts.map(post => {
+          {posts.map((post) => {
             return (
               <li key={post.id}>
                 <a href={`https://spacejelly.dev/posts/${post.slug}`}>
-                  <h3 className={styles.postTitle}>{ post.title }</h3>
-                  <p className={styles.postDate}>{ new Date(post.date).toDateString() }</p>
-                  <div className={styles.postExcerpt} dangerouslySetInnerHTML={{ __html: post.excerpt }} />
+                  <h3 className={styles.postTitle}>{post.title}</h3>
+                  <p className={styles.postDate}>
+                    {new Date(post.date).toDateString()}
+                  </p>
+                  <div
+                    className={styles.postExcerpt}
+                    dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                  />
                 </a>
               </li>
-            )
+            );
           })}
         </ul>
-
       </main>
 
       <footer className={styles.footer}>
-        <p>Find the tutorial on <a href="https://spacejelly.dev/">spacejelly.dev</a>!</p>
+        <p>
+          Find the tutorial on{" "}
+          <a href="https://spacejelly.dev/">spacejelly.dev</a>!
+        </p>
       </footer>
     </div>
-  )
+  );
 }
