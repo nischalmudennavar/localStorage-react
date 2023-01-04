@@ -7,3 +7,5 @@ yarn create next-app -e https://github.com/colbyfayock/demo-welcome-banner-start
 # or
 npx create-next-app -e https://github.com/colbyfayock/demo-welcome-banner-starter
 ```
+
+### Changes made only in Index.js for persistent state 
